@@ -3,13 +3,17 @@
   "description": "REDACTED",
   "version": "2.1.3",
       "content_scripts":[{
-        "matches": [ "https://www.kickstarter.com/projects/*" ],
+        "matches": [
+          "https://www.kickstarter.com/projects/*",
+          "https://twitter.com/*"
+        ],
         "js": [ "redacted.js" ],
         "css": [ "redacted.css" ],
         "run_at": "document_end"
     }],
   "permissions": [
-    "https://www.kickstarter.com/projects/*"
+    "https://www.kickstarter.com/projects/*",
+    "https://twitter.com/"
   ],
   "background": {
     // "scripts": ["background.js"]
