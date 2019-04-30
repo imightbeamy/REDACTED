@@ -84,3 +84,13 @@ textElements.forEach((element) => {
 
   element.innerHTML = replaceContent;
 });
+
+// Sometimes storage isn't loaded yet
+setTimeout(() => chrome.storage.local.get('disabled', storage => {
+  console.log(`REDACTED is ${storage.disabled ? 'disabled' : 'enabled'}`);
+  if (!storage.disabled) {
+    document.getElementsByTagName('body')[0].classList.add("redacted");
+    // Init here
+  }
+  chrome.storage.onChanged.addListener(() => window.location.reload())
+}), 10);
