@@ -3,11 +3,17 @@ html, body {
 }
 
 .redacted .highlight {
+  display: inline-block !important;
   background: white !important;
   font-size: 24px;
   padding: 0 20px;
   font-weight: 800;
   color: red !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.redacted .highlight.active {
+  transform: scale(2) !important;
 }
 
 .redacted h1,
