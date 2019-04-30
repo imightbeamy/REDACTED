@@ -29,6 +29,11 @@ const superlatives = [
   'windiest','wisest','worldliest','worthiest','youngest'
 ];
 
+// kinda hack, but this is a hack day 🤷🏻‍♂️
+Element.prototype.documentOffsetTop = function () {
+  return this.offsetTop + ( this.offsetParent ? this.offsetParent.documentOffsetTop() : 0 );
+};
+
 const textElements = [
   ...document.getElementsByTagName('h1'),
   ...document.getElementsByTagName('h2'),
@@ -60,7 +65,10 @@ button.addEventListener('click', (e) => {
   const nextActiveElement = highlightElements[nextActiveElementIndex];
 
   if (nextActiveElement) {
-    nextActiveElement.scrollIntoView();
+    const top = nextActiveElement.documentOffsetTop() - ( window.innerHeight / 2 );
+
+    window.scrollTo(0, top);
+
     nextActiveElement.classList.add('active');
   }
 });
