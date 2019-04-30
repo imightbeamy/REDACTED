@@ -45,3 +45,8 @@ img {
  border: 2px solid black !important;
  background: white !important;
  }
+
+/* Kickstarter Page */
+.pledge--available .pledge__hover {
+  opacity: 0 !important;
+}
