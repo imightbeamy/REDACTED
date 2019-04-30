@@ -17,6 +17,33 @@ const textElements = [
   ...document.getElementsByTagName('span'),
 ];
 
+const button = document.createElement('button');
+button.className = 'testButton';
+button.innerText = 'Test it';
+
+button.addEventListener('click', (e) => {
+  const highlightElements = [...document.querySelectorAll('.highlight')];
+  const currentActiveElementIndex = highlightElements.findIndex((el) => {
+    return el.className.indexOf('active') !== -1;
+  });
+
+  const currentActiveElement = highlightElements[currentActiveElementIndex];
+
+  if (currentActiveElement) {
+    currentActiveElement.classList.remove('active');
+  }
+
+  const nextActiveElementIndex = (currentActiveElementIndex + 1) % highlightElements.length;
+  const nextActiveElement = highlightElements[nextActiveElementIndex];
+
+  if (nextActiveElement) {
+    nextActiveElement.scrollIntoView();
+    nextActiveElement.classList.add('active');
+  }
+});
+
+document.body.appendChild(button);
+
 textElements.forEach((element) => {
   const { innerText } = element;
   const regex = new RegExp(`(${superlatives.join('|')})`, 'g');
