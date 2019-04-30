@@ -29,70 +29,72 @@ const superlatives = [
   'windiest','wisest','worldliest','worthiest','youngest'
 ];
 
-// kinda hack, but this is a hack day 🤷🏻‍♂️
-Element.prototype.documentOffsetTop = function () {
-  return this.offsetTop + ( this.offsetParent ? this.offsetParent.documentOffsetTop() : 0 );
-};
+const init = () => {
+  // kinda hack, but this is a hack day 🤷🏻‍♂️
+  Element.prototype.documentOffsetTop = function () {
+    return this.offsetTop + ( this.offsetParent ? this.offsetParent.documentOffsetTop() : 0 );
+  };
 
-const textElements = [
-  ...document.getElementsByTagName('h1'),
-  ...document.getElementsByTagName('h2'),
-  ...document.getElementsByTagName('h3'),
-  ...document.getElementsByTagName('h4'),
-  ...document.getElementsByTagName('h5'),
-  ...document.getElementsByTagName('h6'),
-  ...document.getElementsByTagName('p'),
-  ...document.getElementsByTagName('span'),
-];
+  const textElements = [
+    ...document.getElementsByTagName('h1'),
+    ...document.getElementsByTagName('h2'),
+    ...document.getElementsByTagName('h3'),
+    ...document.getElementsByTagName('h4'),
+    ...document.getElementsByTagName('h5'),
+    ...document.getElementsByTagName('h6'),
+    ...document.getElementsByTagName('p'),
+    ...document.getElementsByTagName('span'),
+  ];
 
-const button = document.createElement('button');
-button.className = 'testButton';
-button.innerText = 'Test it';
+  const button = document.createElement('button');
+  button.className = 'testButton';
+  button.innerText = 'Unredacted';
 
-button.addEventListener('click', (e) => {
-  const highlightElements = [...document.querySelectorAll('.highlight')];
-  const currentActiveElementIndex = highlightElements.findIndex((el) => {
-    return el.className.indexOf('active') !== -1;
+  button.addEventListener('click', (e) => {
+    const highlightElements = [...document.querySelectorAll('.highlight')];
+    const currentActiveElementIndex = highlightElements.findIndex((el) => {
+      return el.className.indexOf('active') !== -1;
+    });
+
+    const currentActiveElement = highlightElements[currentActiveElementIndex];
+
+    if (currentActiveElement) {
+      currentActiveElement.classList.remove('active');
+    }
+
+    const nextActiveElementIndex = (currentActiveElementIndex + 1) % highlightElements.length;
+    const nextActiveElement = highlightElements[nextActiveElementIndex];
+
+    if (nextActiveElement) {
+      const top = nextActiveElement.documentOffsetTop() - ( window.innerHeight / 2 );
+
+      window.scrollTo(0, top);
+
+      nextActiveElement.classList.add('active');
+    }
   });
 
-  const currentActiveElement = highlightElements[currentActiveElementIndex];
+  document.body.appendChild(button);
 
-  if (currentActiveElement) {
-    currentActiveElement.classList.remove('active');
-  }
+  textElements.forEach((element) => {
+    const { innerText } = element;
+    const regex = new RegExp(`(${superlatives.join('|')})`, 'g');
+    const replaceContent = innerText.replace(regex, (matched) => {
+      return `<span class="highlight">${matched}</span>`
+    });
 
-  const nextActiveElementIndex = (currentActiveElementIndex + 1) % highlightElements.length;
-  const nextActiveElement = highlightElements[nextActiveElementIndex];
-
-  if (nextActiveElement) {
-    const top = nextActiveElement.documentOffsetTop() - ( window.innerHeight / 2 );
-
-    window.scrollTo(0, top);
-
-    nextActiveElement.classList.add('active');
-  }
-});
-
-document.body.appendChild(button);
-
-textElements.forEach((element) => {
-  const { innerText } = element;
-  const regex = new RegExp(`(${superlatives.join('|')})`, 'g');
-  const replaceContent = innerText.replace(regex, (matched) => {
-    return `<span class="highlight">${matched}</span>`
+    element.innerHTML = replaceContent;
   });
 
-  element.innerHTML = replaceContent;
-});
-
-// Creates a container around <img /> elements so we can put a
-// black overlay in the :after class.
-document.querySelectorAll('img').forEach((element) => {
-  if (element.parentElement) {
-    const originalHTML = element.parentElement.innerHTML;
-    element.parentElement.innerHTML = `<div class="redacted-image">${originalHTML}</div>`;
-  }
-});
+  // Creates a container around <img /> elements so we can put a
+  // black overlay in the :after class.
+  document.querySelectorAll('img').forEach((element) => {
+    if (element.parentElement) {
+      const originalHTML = element.parentElement.innerHTML;
+      element.parentElement.innerHTML = `<div class="redacted-image">${originalHTML}</div>`;
+    }
+  });
+}
 
 // Sometimes storage isn't loaded yet
 setTimeout(() => chrome.storage.local.get('disabled', storage => {
@@ -100,6 +102,7 @@ setTimeout(() => chrome.storage.local.get('disabled', storage => {
   if (!storage.disabled) {
     document.getElementsByTagName('body')[0].classList.add("redacted");
     // Init here
+    init();
   }
   chrome.storage.onChanged.addListener(() => window.location.reload())
 }), 10);
