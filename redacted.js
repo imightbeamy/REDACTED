@@ -26,3 +26,12 @@ textElements.forEach((element) => {
 
   element.innerHTML = replaceContent;
 });
+
+// Creates a container around <img /> elements so we can put a
+// black overlay in the :after class.
+document.querySelectorAll('img').forEach((element) => {
+  if (element.parentElement) {
+    const originalHTML = element.parentElement.innerHTML;
+    element.parentElement.innerHTML = `<div class="redacted-image">${originalHTML}</div>`;
+  }
+});
