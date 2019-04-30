@@ -5,6 +5,10 @@
   color: black !important;
 }
 
+html, body {
+  scroll-behavior: smooth;
+}
+
 .highlight {
   background: white !important;
   color: black !important;
