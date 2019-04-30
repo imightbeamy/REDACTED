@@ -1,5 +1,9 @@
 .highlight {
   background: white !important;
+  font-size: 24px;
+  padding: 0 20px;
+  font-weight: 800;
+  color: red !important;
 }
 
 svg, figcaption, select, h2, h3, input, p, ul li, a, span, button, a.bttn-green {
