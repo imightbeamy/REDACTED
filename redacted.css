@@ -10,16 +10,16 @@
 .redacted h1,
 .redacted h2,
 .redacted h3,
+.redacted p,
+.redacted a,
+.redacted span,
+.redacted ul li,
+.redacted button,
+.redacted select,
+.redacted input,
 .redacted svg,
 .redacted svg path,
 .redacted figcaption,
-.redacted select,
-.redacted input,
-.redacted p,
-.redacted ul li,
-.redacted a,
-.redacted span,
-.redacted button,
 .redacted a.bttn-green {
   display: inline;
   background-color: black !important;
